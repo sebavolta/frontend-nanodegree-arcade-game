@@ -99,6 +99,23 @@
         readyCallbacks.push(func);
     }
 
+    /*Tiles size*/
+    var tiles = {
+        w: 101,
+        h: 83,
+        offset: 25
+    }
+
+    /*Ramdom Y start position for enemies*/
+    function randomY(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    /*Ramdom Speed for enemies*/
+    function randomSpeed(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
     /* This object defines the publicly accessible functions available to
      * developers by creating a global Resources object.
      */
@@ -106,6 +123,14 @@
         load: load,
         get: get,
         onReady: onReady,
-        isReady: isReady
+        isReady: isReady,
+        tiles: tiles,
+        randomY: randomY,
+        randomSpeed: randomSpeed
     };
 })();
+
+/*Logs to console*/
+function log(logs){
+    console.log('--> '+logs);
+}
