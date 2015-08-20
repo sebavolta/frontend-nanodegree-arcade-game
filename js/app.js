@@ -57,12 +57,34 @@ var Player = function() {
     this.y = Resources.tiles.h * 5 - Resources.tiles.offset;
     this.sprite = 'images/char-boy.png';
 
-    this.move = function(){
+    //Moves the playes depending the direction. Calculates the 
+    this.move = function(direction){
+        if(direction == 'left' && this.x >= Resources.tiles.w){
+            this.x -= Resources.tiles.w;
+        }else if(direction == 'right' && this.x <= Resources.tiles.w * 3){
+            this.x += Resources.tiles.w;
+        }else if(direction == 'down' && this.y <= Resources.tiles.h * 4 - Resources.tiles.offset){
+            this.y += Resources.tiles.h //- Resources.tiles.offset;
+            log(this.y)
+        }else if(direction == 'up' && this.y >= Resources.tiles.h - Resources.tiles.offset){
+            this.y -= Resources.tiles.h //- Resources.tiles.offset;
+            log(this.y)
+        }
+    }
 
+    this.checkGoal = function(){
+        if(this.y < Resources.tiles.h - Resources.tiles.offset){
+            log('win');
+        }
     }
 
     this.hitTest = function(){
-
+        for(var i = 0; i < allEnemies.length; i++) {
+            if(this.x > allEnemies[i].x && this.x < allEnemies[i].x +  Resources.tiles.w 
+            && this.y > allEnemies[i].y && this.x < allEnemies[i].y +  Resources.tiles.y){
+                log('hit')
+            }
+        }
     }
 
     this.die = function(){
@@ -73,7 +95,8 @@ var Player = function() {
 
 // This class requires an update(), render()
 Player.prototype.update = function(dt) {
-
+    this.hitTest();
+    this.checkGoal();
 }
 
 Player.prototype.render = function() {
@@ -85,16 +108,16 @@ Player.prototype.render = function() {
 Player.prototype.handleInput = function(allowedKey) {
     switch(allowedKey){
         case 'left':
-            console.log('left');
+            this.move('left');
             break;
         case 'up':
-            console.log('up');
+            this.move('up');
             break;
         case 'right':
-            console.log('right');
+            this.move('right');
             break;
         case 'down':
-            console.log('down');
+            this.move('down');
             break;
         default:
             //
