@@ -161,7 +161,10 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        // noop
+        player.setPos();
+        allEnemies.forEach(function(enemy) {
+            enemy.setPos();
+        });
     }
 
     /* Go ahead and load all of the images we know we're going to need to
@@ -183,4 +186,5 @@ var Engine = (function(global) {
      */
     global.ctx = ctx;
     global.canvas = canvas;
+    global.reset = reset;
 })(this);

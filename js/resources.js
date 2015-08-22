@@ -116,6 +116,13 @@
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
+    /*Tiles size*/
+    var enemyConfig = {
+        w: 101,
+        h: 83,
+        offset: 25
+    }
+
     /* This object defines the publicly accessible functions available to
      * developers by creating a global Resources object.
      */

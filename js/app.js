@@ -53,8 +53,13 @@ var Player = function() {
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
-    this.x = Resources.tiles.w * 2;
-    this.y = Resources.tiles.h * 5 - Resources.tiles.offset;
+
+    //Sets the initial position of the Player
+    this.setPos = function(){
+        this.x = Resources.tiles.w * 2;
+        this.y = Resources.tiles.h * 5 - Resources.tiles.offset; 
+    }
+
     this.sprite = 'images/char-boy.png';
 
     //Moves the playes depending the direction. Calculates the 
@@ -64,38 +69,54 @@ var Player = function() {
         }else if(direction == 'right' && this.x <= Resources.tiles.w * 3){
             this.x += Resources.tiles.w;
         }else if(direction == 'down' && this.y <= Resources.tiles.h * 4 - Resources.tiles.offset){
-            this.y += Resources.tiles.h //- Resources.tiles.offset;
-            log(this.y)
+            this.y += Resources.tiles.h;
         }else if(direction == 'up' && this.y >= Resources.tiles.h - Resources.tiles.offset){
-            this.y -= Resources.tiles.h //- Resources.tiles.offset;
-            log(this.y)
+            this.y -= Resources.tiles.h;
         }
     }
 
-    this.checkGoal = function(){
-        if(this.y < Resources.tiles.h - Resources.tiles.offset){
-            log('win');
-        }
-    }
+    //Sets the position at start
+    this.setPos(); 
+}
 
-    this.hitTest = function(){
-        for(var i = 0; i < allEnemies.length; i++) {
-            if(this.x > allEnemies[i].x && this.x < allEnemies[i].x +  Resources.tiles.w 
-            && this.y > allEnemies[i].y && this.x < allEnemies[i].y +  Resources.tiles.y){
-                log('hit')
+//Detects the player collitions with another type of obects
+Player.prototype.hitTest = function(arrayObj, typeObj) {
+    //log('calls hittets')
+    for(var i = 0; i < arrayObj.length; i++) {
+        if(this.x > arrayObj[i].x && this.x < arrayObj[i].x +  Resources.tiles.w - Resources.tiles.offset
+        && this.y > arrayObj[i].y - Resources.tiles.offset && this.y < arrayObj[i].y + Resources.tiles.h - Resources.tiles.offset ){
+            log('hit')
+
+            switch(typeObj){
+                case 'enemy':
+                    this.die();
+                    break;
+                case 'gem':
+                    log(typeObj)
+                    break;
+                default:
+                    log(typeObj)
+                    break;
             }
-        }
+        }        
     }
+}
 
-    this.die = function(){
+//Player dies and game resets
+Player.prototype.die = function() {
+    reset()
+}
 
+//Detects when the player gets to the water
+Player.prototype.checkGoal = function(){
+    if(this.y < Resources.tiles.h - Resources.tiles.offset){
+        log('win');
     }
-    
 }
 
 // This class requires an update(), render()
 Player.prototype.update = function(dt) {
-    this.hitTest();
+    this.hitTest(allEnemies, 'enemy');
     this.checkGoal();
 }
 
@@ -135,12 +156,10 @@ for(var i = 0; i < totalEnemies; i++){
         allEnemies.push(new Enemy());
         log('count')
     }, 1000)
-
 }
 
 // Place the player object in a variable called player
 var player = new Player();
-
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
