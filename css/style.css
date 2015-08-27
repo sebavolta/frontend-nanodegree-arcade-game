@@ -1,3 +1,7 @@
 body {
     text-align: center;
 }
+
+#canvasOver {
+	margin: -606px 0 0 -505px;
+}

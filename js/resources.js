@@ -123,6 +123,16 @@
         offset: 25
     }
 
+    /**/
+    var gameConfig = {
+        isPlaying: false,
+        gameOver: false,
+        scoreText: 'Score: ',
+        score: 0,
+        overText: 'Game Over!',
+        tryAgain: 'Try again! press Enter to restart.'
+    }
+
     /* This object defines the publicly accessible functions available to
      * developers by creating a global Resources object.
      */
@@ -133,7 +143,8 @@
         isReady: isReady,
         tiles: tiles,
         randomY: randomY,
-        randomSpeed: randomSpeed
+        randomSpeed: randomSpeed,
+        gameConfig: gameConfig
     };
 })();
 

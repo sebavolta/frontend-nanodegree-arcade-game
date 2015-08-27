@@ -37,8 +37,11 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    this.x += this.speed * dt;
-    this.isOut();
+    //Check if the game is playing and not stopped
+    if(Resources.gameConfig.isPlaying){
+        this.x += this.speed * dt;
+        this.isOut();
+    }
 }
 
 // Draw the enemy on the screen, required method for game
@@ -53,17 +56,21 @@ var Player = function() {
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
-
-    //Sets the initial position of the Player
-    this.setPos = function(){
-        this.x = Resources.tiles.w * 2;
-        this.y = Resources.tiles.h * 5 - Resources.tiles.offset; 
-    }
-
     this.sprite = 'images/char-boy.png';
 
-    //Moves the playes depending the direction. Calculates the 
-    this.move = function(direction){
+    //Sets the position at start
+    this.setPos(); 
+}
+
+//Sets the initial position of the Player
+Player.prototype.setPos = function(){
+    this.x = Resources.tiles.w * 2;
+    this.y = Resources.tiles.h * 5 - Resources.tiles.offset; 
+}
+
+//Moves the playes depending the direction. Calculates the 
+Player.prototype.move = function(direction){
+    if(Resources.gameConfig.isPlaying){
         if(direction == 'left' && this.x >= Resources.tiles.w){
             this.x -= Resources.tiles.w;
         }else if(direction == 'right' && this.x <= Resources.tiles.w * 3){
@@ -74,10 +81,8 @@ var Player = function() {
             this.y -= Resources.tiles.h;
         }
     }
-
-    //Sets the position at start
-    this.setPos(); 
 }
+
 
 //Detects the player collitions with another type of obects
 Player.prototype.hitTest = function(arrayObj, typeObj) {
@@ -102,27 +107,31 @@ Player.prototype.hitTest = function(arrayObj, typeObj) {
     }
 }
 
+// This class requires an update(), render()
+Player.prototype.update = function(dt) {
+    if(Resources.gameConfig.isPlaying){
+        this.hitTest(allEnemies, 'enemy');
+        this.checkGoal();
+    }
+}
+
+Player.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+}
+
 //Player dies and game resets
 Player.prototype.die = function() {
-    reset()
+    Resources.gameConfig.isPlaying = false;
+    Resources.gameConfig.gameOver = true;
+    reset();
 }
 
 //Detects when the player gets to the water
 Player.prototype.checkGoal = function(){
     if(this.y < Resources.tiles.h - Resources.tiles.offset){
-        log('win');
+        reset();
+        addScore();
     }
-}
-
-// This class requires an update(), render()
-Player.prototype.update = function(dt) {
-    this.hitTest(allEnemies, 'enemy');
-    this.checkGoal();
-}
-
-Player.prototype.render = function() {
-   //log(this.x, this.y);
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
 // a handleInput() method.
@@ -173,3 +182,42 @@ document.addEventListener('keyup', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
+
+/*Adds score function*/
+var addScore = function(){
+    Resources.gameConfig.score+= 10;
+}
+
+/*Shows Game Over screen*/
+var showOver = function(){
+    cto.font = "60px Verdana";
+    cto.fillStyle = "#fff"; 
+    cto.fillText(Resources.gameConfig.overText, canvas.width/2 - cto.measureText(Resources.gameConfig.overText).width/2, canvas.height/2);
+    cto.font = "20px Verdana";
+    cto.fillText(Resources.gameConfig.tryAgain, canvas.width/2 - cto.measureText(Resources.gameConfig.tryAgain).width/2, canvas.height/2 + 50);
+}
+
+/*Score function*/
+var showScore = function(){
+    cto.fillStyle = "#fff"; 
+    cto.clearRect(0,0,canvas.width,canvas.height);
+    cto.font = "20px Verdana";
+    cto.fillText(Resources.gameConfig.scoreText + Resources.gameConfig.score, canvas.width/2 - cto.measureText(Resources.gameConfig.scoreText).width/2, 80);
+}
+
+/*Listen to click on canvas on Game Over*/
+var listenClick = function(){
+    document.getElementById("canvasOver").addEventListener('click', function(e) {
+        if(Resources.gameConfig.gameOver){
+            restart();
+        }
+    });
+}
+
+/*Restart game function*/
+var restart = function(){
+    cto.clearRect(0,0,canvas.width,canvas.height);
+    Resources.gameConfig.score = 0;
+    Resources.gameConfig.gameOver = false;
+    Resources.gameConfig.isPlaying = true;
+}

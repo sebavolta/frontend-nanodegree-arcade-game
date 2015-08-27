@@ -29,6 +29,16 @@ var Engine = (function(global) {
     canvas.height = 606;
     doc.body.appendChild(canvas);
 
+    /*Generate canvas for Game Over and 
+    Score screen*/
+    var canvasOver = doc.createElement('canvas'),
+        cto = canvasOver.getContext('2d');
+
+    canvasOver.id = "canvasOver";
+    canvasOver.width = 505;
+    canvasOver.height = 606;
+    doc.body.appendChild(canvasOver);
+
     /* This function serves as the kickoff point for the game loop itself
      * and handles properly calling the update and render methods.
      */
@@ -65,6 +75,8 @@ var Engine = (function(global) {
      */
     function init() {
         reset();
+        Resources.gameConfig.isPlaying = true;
+        listenClick();
         lastTime = Date.now();
         main();
     }
@@ -81,7 +93,12 @@ var Engine = (function(global) {
     function update(dt) {
         ctx.clearRect(0,0,canvas.width,canvas.height);
         updateEntities(dt);
-        // checkCollisions();
+        showScore();
+
+        //Checks if game is over
+        if(Resources.gameConfig.gameOver){
+            showOver();
+        }
     }
 
     /* This is called by the update function  and loops through all of the
@@ -186,5 +203,7 @@ var Engine = (function(global) {
      */
     global.ctx = ctx;
     global.canvas = canvas;
+    global.canvasOver = canvasOver;
+    global.cto = cto;
     global.reset = reset;
 })(this);
