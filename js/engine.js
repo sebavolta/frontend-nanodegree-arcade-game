@@ -76,7 +76,6 @@ var Engine = (function(global) {
     function init() {
         reset();
         Resources.gameConfig.isPlaying = true;
-        listenClick();
         lastTime = Date.now();
         main();
     }
@@ -170,6 +169,10 @@ var Engine = (function(global) {
             enemy.render();
         });
 
+        allStars.forEach(function(star) {
+            star.render();
+        });
+
         player.render();
     }
 
@@ -179,8 +182,13 @@ var Engine = (function(global) {
      */
     function reset() {
         player.setPos();
+
         allEnemies.forEach(function(enemy) {
             enemy.setPos();
+        });
+
+        allStars.forEach(function(star) {
+            star.setPos();
         });
     }
 
@@ -193,7 +201,8 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
+        'images/char-boy.png',
+        'images/Star.png'
     ]);
     Resources.onReady(init);
 

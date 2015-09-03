@@ -1,6 +1,13 @@
 frontend-nanodegree-arcade-game
 ===============================
 
-Students should use this rubric: https://www.udacity.com/course/viewer#!/c-ud015/l-3072058665/m-3072588797
+Steps to run the application:
 
-for self-checking their submission.
+- Open the index.html file in your browser, it can be latest versions of Chrome, Firefox or Internet Explorer
+- Move the player using the arrows on your keyboard: LEFT, TOP, RIGHT and BOTTOM.
+- Each arrow will move the player one block at the time.
+- The objective is making the player reach the water, by passing through the stone and avoiding the enemies (insects)
+- Each time you get to the water, you get 10 points!
+- Try to pick up the stars to gain bonus points.
+- If an insect reaches the player, you will loose the game!
+- But don't worry, you can restart the game by pressing the UP arrow again. Enjoy!

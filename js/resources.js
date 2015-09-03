@@ -106,13 +106,9 @@
         offset: 25
     }
 
-    /*Ramdom Y start position for enemies*/
-    function randomY(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    /*Ramdom Speed for enemies*/
-    function randomSpeed(min, max) {
+    /*Ramdom Value generator for X and Y 
+    start position and Speed for enemies*/
+    function randomVal(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
@@ -123,14 +119,20 @@
         offset: 25
     }
 
-    /**/
+    /*Game configuration for Score, texts, enemies and stars*/
     var gameConfig = {
         isPlaying: false,
         gameOver: false,
         scoreText: 'Score: ',
         score: 0,
         overText: 'Game Over!',
-        tryAgain: 'Try again! press Enter to restart.'
+        tryAgain: 'Try again! press UP key to restart.',
+        goalPoints: 10,
+        totalEnemies: 3,
+        enemyMinSpeed: 50,
+        enemyMaxSpeed: 400,
+        totalStars: 3,
+        starPoints: 20
     }
 
     /* This object defines the publicly accessible functions available to
@@ -142,8 +144,7 @@
         onReady: onReady,
         isReady: isReady,
         tiles: tiles,
-        randomY: randomY,
-        randomSpeed: randomSpeed,
+        randomVal: randomVal,
         gameConfig: gameConfig
     };
 })();
